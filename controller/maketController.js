@@ -3,8 +3,8 @@ const path = require('path');
 
 class maketController {
     async createNewMaket (req, res)  {
-        const {user_id, file_url, price, status, accept_status, original_file_name} = req.body
-        const newMaket = await db.query('INSERT into makets (user_id, file_url, price, status, accept_status, original_file_name) values ($1, $2, $3, $4, $5, $6) RETURNING *', [user_id, file_url, price, status, accept_status, original_file_name])
+        const {user_id, file_url, price, status, accept_status, original_file_name, address} = req.body
+        const newMaket = await db.query('INSERT into makets (user_id, file_url, price, status, accept_status, original_file_name, address) values ($1, $2, $3, $4, $5, $6, $7) RETURNING *', [user_id, file_url, price, status, accept_status, original_file_name])
         res.json(newMaket.rows)
     }
     async getNotAcceptedMakets (req, res) {

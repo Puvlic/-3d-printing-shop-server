@@ -1,4 +1,4 @@
-const Mail = require('./Mail.js')
+
 const path = require('path')
 const db = require('./db')
 const fs = require('fs');
@@ -15,15 +15,29 @@ const typeRouter = require('./routes/type.router')
 const authRouter = require('./routes/authRouter')
 const getOrdersRouter = require('./routes/ordersRouter')
 const maketRouter = require('./routes/maketRouter')
-const PORT = process.env.PORT || 8080
+// process.env.PORT ||
+const PORT = 8080
 const cors = require('cors')
 
 const app = express()
+
+const http = require("http").createServer(app)
+const socketIO = require('socket.io') (http, {
+    cors: {
+        origin: "*"
+    }
+})
+
+
 app.use(cors())
 
 
 app.get('/hello', function (req, res) {
-    res.header("Access-Control-Allow-Origin", "*");
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('ngrok-skip-browser-warning', true);
+
     res.send('Hello World');
 })
 app.use(express.json())

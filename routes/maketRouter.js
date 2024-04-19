@@ -22,5 +22,8 @@ router.route('/maket/discount/:id')
 router.route('/maket/accept/:id')
     .put(userController.acceptOrder)
 
+router.route('/accepted_maket')
+    .get(userController.getAllAcceptedMakets)
+    .put(userController.acceptedMaketChange)
 
 module.exports = router

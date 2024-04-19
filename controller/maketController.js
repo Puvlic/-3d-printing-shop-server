@@ -4,7 +4,7 @@ const path = require('path');
 class maketController {
     async createNewMaket (req, res)  {
         const {user_id, file_url, price, status, accept_status, original_file_name, address} = req.body
-        const newMaket = await db.query('INSERT into makets (user_id, file_url, price, status, accept_status, original_file_name, address) values ($1, $2, $3, $4, $5, $6, $7) RETURNING *', [user_id, file_url, price, status, accept_status, original_file_name])
+        const newMaket = await db.query('INSERT into makets (user_id, file_url, price, status, accept_status, original_file_name, address) values ($1, $2, $3, $4, $5, $6, $7) RETURNING *', [user_id, file_url, price, status, accept_status, original_file_name, address])
         res.json(newMaket.rows)
     }
     async getNotAcceptedMakets (req, res) {
@@ -20,6 +20,10 @@ class maketController {
     async getMaketsByUser (req, res) {
         const id = req.params.id
         const makets = await db.query('SELECT * from makets WHERE accept_status = 3 and user_id = $1', [id])
+        res.json(makets.rows)
+    }
+    async getAllAcceptedMakets (req, res) {
+        const makets = await db.query('SELECT * from makets WHERE accept_status = 3')
         res.json(makets.rows)
     }
     async getMaket (req, res) {
@@ -40,6 +44,11 @@ class maketController {
     async discountRequest (req, res) {
         const id = req.params.id
         const maket = await db.query("UPDATE makets set status='Запрос на скидку', accept_status = 1 WHERE id = $1 RETURNING *", [id])
+        res.json(maket)
+    }
+    async acceptedMaketChange (req, res) {
+        const {id, status, price} = req.body
+        const maket = await  db.query("UPDATE makets set price = $3, status = $2 WHERE id = $1 RETURNING *", [id, status, price])
         res.json(maket)
     }
 }
